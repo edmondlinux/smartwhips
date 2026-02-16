@@ -1,0 +1,159 @@
+'use client';
+
+import { useState, useEffect, useMemo } from 'react';
+import { Search, X, MapPin, Loader2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import gbData from '@/data/gb.json';
+import Link from 'next/link';
+import { searchTownsAction } from '@/app/actions';
+
+export function BottomSheet() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [dynamicRecommendations, setDynamicRecommendations] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const towns = useMemo(() => {
+    return gbData.map(t => ({
+      id: t.city.toLowerCase().replace(/\s+/g, '-'),
+      name: t.city,
+      admin: t.admin_name
+    }));
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 2500) {
+        if (!hasScrolled) {
+          setIsOpen(true);
+          setHasScrolled(true);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasScrolled]);
+
+  useEffect(() => {
+    const fetchDynamic = async () => {
+      if (search.length < 3) {
+        setDynamicRecommendations([]);
+        return;
+      }
+      
+      setIsSearching(true);
+      try {
+        const results = await searchTownsAction(search);
+        // Filter out those already in local towns to avoid duplicates
+        const uniqueResults = results.filter(res => 
+          !towns.some(t => t.name.toLowerCase() === res.name.toLowerCase())
+        );
+        setDynamicRecommendations(uniqueResults);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    const timer = setTimeout(fetchDynamic, 300);
+    return () => clearTimeout(timer);
+  }, [search, towns]);
+
+  const recommendations = useMemo(() => {
+    if (!search) return [];
+    const internalRecs = towns
+      .filter(town => town.name.toLowerCase().includes(search.toLowerCase()))
+      .slice(0, 5);
+    
+    // Combine and ensure unique IDs
+    const combined = [...internalRecs, ...dynamicRecommendations];
+    const seen = new Set();
+    const unique = combined.filter(item => {
+      if (seen.has(item.id)) return false;
+      seen.add(item.id);
+      return true;
+    });
+
+    return unique.slice(0, 10);
+  }, [search, towns, dynamicRecommendations]);
+
+  if (!isOpen && !hasScrolled) return null;
+
+  return (
+    <div
+      className={cn(
+        "fixed inset-x-0 bottom-0 z-50 transition-transform duration-300 ease-in-out transform",
+        isOpen ? "translate-y-0" : "translate-y-full"
+      )}
+    >
+      <div className="bg-white rounded-t-2xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] border-t border-gray-100 p-6 pb-8">
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex-1">
+            <h2 className="text-lg font-bold text-gray-900 mb-1">
+              Find Your Town
+            </h2>
+            <p className="text-sm text-gray-600">
+              We noticed you&apos;ve been scrolling in search of your town. Quickly find it by searching its name below.
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full -mr-2"
+            onClick={() => setIsOpen(false)}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <div className="relative">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            {isSearching ? (
+              <Loader2 className="h-4 w-4 animate-spin text-orange-500" />
+            ) : (
+              <Search className="h-4 w-4" />
+            )}
+          </div>
+          <Input
+            type="text"
+            placeholder="Search for your town..."
+            className="pl-10 h-12 rounded-xl border-gray-200 focus:ring-black"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            autoFocus
+          />
+        </div>
+
+        {search && (
+          <div className="mt-4 max-h-[40vh] overflow-y-auto divide-y divide-gray-50 bg-gray-50 rounded-xl">
+            {recommendations.length > 0 ? (
+              recommendations.map((town) => (
+                <Link
+                  key={town.id}
+                  href={`/towns/${town.id}`}
+                  className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <MapPin className={cn("h-4 w-4 mr-3", 'isDynamic' in town ? 'text-blue-500' : 'text-orange-500')} />
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-900">{town.name}</span>
+                    <span className="text-[10px] text-gray-500 uppercase tracking-widest">{town.admin}</span>
+                  </div>
+                </Link>
+              ))
+            ) : !isSearching && (
+              <div className="px-4 py-3 text-sm text-gray-500 text-center">
+                No towns found matching &quot;{search}&quot;
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
