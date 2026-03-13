@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import gbData from '@/data/gb.json';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://smart-whip.shop';
+  const baseUrl = 'https://smartwhip.org.uk';
   
   const townUrls = gbData.map((t) => ({
     url: `${baseUrl}/towns/${t.city.toLowerCase().replace(/\s+/g, '-')}`,
