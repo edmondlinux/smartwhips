@@ -84,7 +84,7 @@ export default async function TownPage({ params }: Props) {
     '@type': 'Product',
     'name': `SmartWhip 640g Cylinder - ${townData.city} Delivery`,
     'description': `Premium 640g Smartwhip, Fastgas, Cream delux nitrous oxide cream charger canister, N2O delivery in ${townData.city}.`,
-    'image': `${process.env.BASE_URL || 'https://www.smart-whip.shop'}/og_image/og_image.jpeg`,
+    'image': `${process.env.BASE_URL || 'https://www.smartwhip.org.uk'}/og_image/og_image.jpeg`,
     'brand': {
       '@type': 'Brand',
       'name': 'Smartwhip'
@@ -109,7 +109,7 @@ export default async function TownPage({ params }: Props) {
     },
     'offers': {
       '@type': 'Offer',
-      'url': `${process.env.BASE_URL || 'https://smart-whip.shop'}/towns/${town}`,
+      'url': `${process.env.BASE_URL || 'https://smartwhip.org.uk.shop'}/towns/${town}`,
       'priceCurrency': 'GBP',
       'price': '30.00',
       'priceValidUntil': '2026-12-31',
