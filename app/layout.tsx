@@ -4,6 +4,7 @@ import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/next';
 
 const baseUrl = process.env.BASE_URL || 'https://smart-whip.shop';
 
@@ -119,6 +120,7 @@ export default function RootLayout({
         />
         <FloatingActionButtons />
         <BottomSheet />
+        <Analytics />
       </body>
     </html>
   );
