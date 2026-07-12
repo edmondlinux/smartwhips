@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import gbData from '@/data/gb.json';
 import { fetchTownFromOSM } from '@/lib/osm';
+import { getSiteLinks } from '@/lib/links';
 
 interface Props {
   params: Promise<{ town: string }>;
@@ -204,16 +205,19 @@ export default async function TownPage({ params }: Props) {
 
   const message = `hello i am insterested in getting some of your products are you Active? i am in ${townData.city}`;
   const encodedMessage = encodeURIComponent(message);
-  const whatsappBaseUrl = process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/447450595758";
-  const telegramBaseUrl = process.env.NEXT_PUBLIC_TELEGRAM_URL || "https://wa.me/447450595758";
+  const { whatsapp: whatsappBase, telegram: telegramBase } = await getSiteLinks();
 
-  const whatsappUrl = whatsappBaseUrl.includes('?') 
-    ? `${whatsappBaseUrl}&text=${encodedMessage}`
-    : `${whatsappBaseUrl}?text=${encodedMessage}`;
-    
-  const telegramUrl = telegramBaseUrl.includes('?')
-    ? `${telegramBaseUrl}&text=${encodedMessage}`
-    : `${telegramBaseUrl}?text=${encodedMessage}`;
+  const whatsappUrl = whatsappBase
+    ? (whatsappBase.includes('?')
+        ? `${whatsappBase}&text=${encodedMessage}`
+        : `${whatsappBase}?text=${encodedMessage}`)
+    : null;
+
+  const telegramUrl = telegramBase
+    ? (telegramBase.includes('?')
+        ? `${telegramBase}&text=${encodedMessage}`
+        : `${telegramBase}?text=${encodedMessage}`)
+    : null;
 
   return (
     <div className="min-h-screen bg-white selection:bg-orange-100 selection:text-orange-900">
@@ -305,24 +309,28 @@ export default async function TownPage({ params }: Props) {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <a 
-                      href={whatsappUrl}
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white py-6 rounded-2xl text-sm font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-green-100"
-                    >
-                      <MessageCircle className="h-5 w-5" />
-                      WhatsApp
-                    </a>
+                    {whatsappUrl && (
+                      <a
+                        href={whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white py-6 rounded-2xl text-sm font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-green-100"
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                        WhatsApp
+                      </a>
+                    )}
+                    {telegramUrl && (
                       <a
                         href={telegramUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-3 bg-[#0088cc] hover:bg-[#0077b5] text-white py-6 rounded-2xl text-sm font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-blue-100"
                       >
-                      <Send className="h-5 w-5" />
-                      Telegram
-                    </a>
+                        <Send className="h-5 w-5" />
+                        Telegram
+                      </a>
+                    )}
                   </div>
                 </div>
               </CardContent>

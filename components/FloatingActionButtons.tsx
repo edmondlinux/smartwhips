@@ -1,17 +1,15 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
+import { getSiteLinks } from '@/lib/links';
 
-export function FloatingActionButtons() {
-  const whatsappUrl = process.env.NEXT_PUBLIC_WHATSAPP_URL;
-  const telegramUrl = process.env.NEXT_PUBLIC_TELEGRAM_URL;
+export async function FloatingActionButtons() {
+  const { whatsapp, telegram } = await getSiteLinks();
 
   return (
     <div className="fixed bottom-6 right-6 flex flex-col gap-4 z-50">
-      {whatsappUrl && (
+      {whatsapp && (
         <Link
-          href={whatsappUrl}
+          href={whatsapp}
           target="_blank"
           rel="noopener noreferrer"
           className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200"
@@ -25,9 +23,9 @@ export function FloatingActionButtons() {
           />
         </Link>
       )}
-      {telegramUrl && (
+      {telegram && (
         <Link
-          href={telegramUrl}
+          href={telegram}
           target="_blank"
           rel="noopener noreferrer"
           className="w-14 h-14 rounded-full bg-[#0088cc] flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200"
