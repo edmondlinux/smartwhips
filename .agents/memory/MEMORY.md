@@ -1,0 +1,1 @@
+- [SmartWhip SEO project](smartwhip-seo.md) — canonical base URL is www.smartwhip.org.uk; town page had fake ratings/drug refs that must stay removed; see topic file for full architecture.
