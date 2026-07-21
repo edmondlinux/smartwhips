@@ -226,13 +226,18 @@ export default function HomePageClient() {
                 SmartWhip.org.uk supplies genuine SmartWhip 640g and 2kg nitrous oxide cylinders for legitimate culinary and catering use across the UK. Orders are placed via WhatsApp, email or Telegram and delivered directly — most deliveries arrive within 25 minutes. Browse our <Link href="/smartwhip-canisters" className="text-orange-500 underline underline-offset-2">canister options</Link> or enquire about <Link href="/smartwhip-wholesale" className="text-orange-500 underline underline-offset-2">wholesale pricing</Link>.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
+                <Link href="/contact">
+                  <Button className="bg-gray-900 hover:bg-orange-500 text-white rounded-2xl h-14 px-8 text-sm font-black uppercase tracking-widest shadow-2xl shadow-gray-300 transition-colors">
+                    Buy Now
+                  </Button>
+                </Link>
                 <Link href="/smartwhip-canisters">
-                  <Button className="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl h-14 px-8 text-sm font-black uppercase tracking-widest">
-                    Compare SmartWhip Canister Sizes
+                  <Button variant="outline" className="rounded-2xl h-14 px-8 text-sm font-black uppercase tracking-widest border-2">
+                    Compare Sizes & Prices
                   </Button>
                 </Link>
                 <Link href="/guides/what-is-smartwhip">
-                  <Button variant="outline" className="rounded-2xl h-14 px-8 text-sm font-black uppercase tracking-widest border-2">
+                  <Button variant="ghost" className="rounded-2xl h-14 px-8 text-sm font-black uppercase tracking-widest text-gray-500 hover:text-gray-900">
                     What is SmartWhip?
                   </Button>
                 </Link>
