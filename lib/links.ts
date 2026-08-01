@@ -15,7 +15,7 @@ export async function getSiteLinks(): Promise<SiteLinks> {
   if (apiBase && slug) {
     try {
       const url = `${apiBase.replace(/\/$/, '')}/api/public/websites/${slug}/links`;
-      const res = await fetch(url, { next: { revalidate: 60 } });
+      const res = await fetch(url, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         return {
