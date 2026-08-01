@@ -54,3 +54,7 @@ externalPort = 80
 [userenv.shared]
 NEXT_PUBLIC_TELEGRAM_URL = "https://t.me/smartwhipsuk"
 NEXT_PUBLIC_WHATSAPP_URL = "https://wa.me/447735315695?text=Hello%20are%20you%20active%3F%20From%20ApexWhips.com"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 60000
