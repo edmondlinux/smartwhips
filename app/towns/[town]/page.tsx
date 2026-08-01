@@ -191,22 +191,8 @@ export default async function TownPage({ params }: Props) {
     },
   ];
 
-  const message = `Hi, I'm interested in ordering SmartWhip. I'm based in ${townData.city}. Can you confirm availability?`;
-  const encodedMessage = encodeURIComponent(message);
-  const { whatsapp: whatsappBase, telegram: telegramBase } =
+  const { whatsapp: whatsappUrl, telegram: telegramUrl } =
     await getSiteLinks();
-
-  const whatsappUrl = whatsappBase
-    ? whatsappBase.includes("?")
-      ? `${whatsappBase}&text=${encodedMessage}`
-      : `${whatsappBase}?text=${encodedMessage}`
-    : null;
-
-  const telegramUrl = telegramBase
-    ? telegramBase.includes("?")
-      ? `${telegramBase}&text=${encodedMessage}`
-      : `${telegramBase}?text=${encodedMessage}`
-    : null;
 
   return (
     <div className="min-h-screen bg-white selection:bg-orange-100 selection:text-orange-900">
