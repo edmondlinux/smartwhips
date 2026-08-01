@@ -48,3 +48,9 @@ externalPort = 3000
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[userenv]
+
+[userenv.shared]
+NEXT_PUBLIC_TELEGRAM_URL = "https://t.me/smartwhipsuk"
+NEXT_PUBLIC_WHATSAPP_URL = "https://wa.me/447735315695?text=Hello%20are%20you%20active%3F%20From%20ApexWhips.com"
